@@ -81,6 +81,7 @@ Additional Guidelines:
 - Prefer minimal, working features over static or hardcoded content
 - Reuse and structure components modularly — split large screens into smaller files (e.g., Column.tsx, TaskCard.tsx, etc.) and import them
 - Ensure the UI is visually appealing — use Tailwind utility classes for vibrant layouts (e.g. background gradients, rounded sections, shadows, hover effects). Avoid all-gray or unstyled components. Think modern startup design, not default styles.
+- Use emojis and vibrant Tailwind color palettes and gradients where appropriate to add character to playful UIs.
 
 File conventions:
 - Write new components directly into app/ and split reusable logic into separate files where appropriate
