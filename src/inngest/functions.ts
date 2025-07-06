@@ -4,21 +4,30 @@ import {
   createAgent,
   createTool,
   createNetwork,
+  openai,
+  type Tool,
 } from "@inngest/agent-kit";
 import { z } from "zod";
 import { Sandbox } from "@e2b/code-interpreter";
 import { getSandbox, lastAssistantTextMessageContent } from "./utils";
 import { PROMPT } from "@/prompt";
-export const helloWorld = inngest.createFunction(
-  { id: "hello-world" },
-  { event: "test/hello.world" },
+import { prisma } from "@/lib/db";
+
+interface AgentState {
+  summary: string;
+  files: { [path: string]: string };
+}
+
+export const codeAgentFunction = inngest.createFunction(
+  { id: "code-agent" },
+  { event: "code-agent/run" },
   async ({ event, step }) => {
     const sandBoxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create("hardy-nextjs");
       return sandbox.sandboxId;
     });
 
-    const codeAgent = createAgent({
+    const codeAgent = createAgent<AgentState>({
       name: "code-agent",
       description:
         "A code agent that can write code in a Next.js 15.3.3 environment",
@@ -27,6 +36,13 @@ export const helloWorld = inngest.createFunction(
         model: "gemini-2.0-flash-lite",
         apiKey: process.env.GEMINI_API_KEY,
       }),
+      // model: openai({
+      //   model: "gpt-4o",
+      //   apiKey: process.env.OPENAI_API_KEY,
+      //   defaultParameters: {
+      //     temperature: 0.2,
+      //   },
+      // }),
       tools: [
         createTool({
           name: "terminal",
@@ -73,7 +89,10 @@ export const helloWorld = inngest.createFunction(
               })
             ),
           }),
-          handler: async ({ files }, { step, network }) => {
+          handler: async (
+            { files },
+            { step, network }: Tool.Options<AgentState>
+          ) => {
             const newFile = await step?.run(
               "create-or-update-file",
               async () => {
@@ -135,12 +154,12 @@ export const helloWorld = inngest.createFunction(
       },
     });
 
-    const network = createNetwork({
+    const network = createNetwork<AgentState>({
       name: "code-agent-network",
       agents: [codeAgent],
       maxIter: 15,
       router: async ({ network }) => {
-        const summary = network.state.data?.summary;
+        const summary = network.state.data.summary;
         if (summary) {
           return;
         }
@@ -148,11 +167,41 @@ export const helloWorld = inngest.createFunction(
       },
     });
     const result = await network.run(event.data.value);
-
+    const isError =
+      !result.state.data.summary ||
+      Object.keys(result.state.data.files || {}).length === 0;
     const sandbox = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandBoxId);
       const host = sandbox.getHost(3000);
       return `http://${host}`;
+    });
+
+    // Save the messages to the database
+    await step.run("save-result", async () => {
+      if (isError) {
+        await prisma.message.create({
+          data: {
+            content: "Something went wrong. Please try again.",
+            role: "ASSISTANT",
+            type: "ERROR",
+          },
+        });
+        return;
+      }
+      await prisma.message.create({
+        data: {
+          content: result.state.data.summary || "No summary provided",
+          role: "ASSISTANT",
+          type: "RESULT",
+          Fragment: {
+            create: {
+              sandboxUrl: sandbox,
+              title: "",
+              files: result.state.data.files || {},
+            },
+          },
+        },
+      });
     });
 
     return {
