@@ -33,7 +33,7 @@ export const codeAgentFunction = inngest.createFunction(
         "A code agent that can write code in a Next.js 15.3.3 environment",
       system: PROMPT,
       model: gemini({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-2.5-flash-lite-preview-06-17",
         apiKey: process.env.GEMINI_API_KEY,
       }),
       // model: openai({
