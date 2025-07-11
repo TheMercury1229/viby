@@ -27,7 +27,6 @@ const FragementCard = ({
   isActive,
   onFragementClick,
 }: FragementCardProps) => {
-  console.log("Fragment Card", fragment.title);
   return (
     <button
       className={cn(
