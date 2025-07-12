@@ -27,18 +27,22 @@ export const MessageContainer = ({
       }
     )
   );
-  // Set the active fragment to the last assistant message's fragment
-  // Todo:This logic is commented because live messages are not yet implemented
-  // useEffect(() => {
-  //   const lastAssistantMessageWithFragment = messages.findLast(
-  //     (message) => message.role === "ASSISTANT" && !!message.Fragment
-  //   );
-  //   if (lastAssistantMessageWithFragment?.Fragment) {
-  //     setActiveFragement(lastAssistantMessageWithFragment.Fragment);
-  //   }
-  // }, [messages, setActiveFragement]);
-  // Scroll to the bottom when messages change
+
   const bottomRef = useRef<HTMLDivElement>(null);
+  const lastAssitantMessageToRef = useRef<string | null>(null);
+  useEffect(() => {
+    const lastAssistantMessage = messages.findLast(
+      (message) => message.role === "ASSISTANT"
+    );
+    if (
+      lastAssistantMessage?.Fragment &&
+      lastAssistantMessage.id !== lastAssitantMessageToRef.current
+    ) {
+      setActiveFragement(lastAssistantMessage.Fragment);
+      lastAssitantMessageToRef.current = lastAssistantMessage.id;
+    }
+  }, [messages, setActiveFragement]);
+  // Scroll to the bottom when messages change
   useEffect(() => {
     bottomRef.current?.scrollIntoView();
   }, [messages.length]);
