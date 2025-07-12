@@ -58,6 +58,7 @@ Additional Guidelines:
 - You MUST use the terminal tool to install any packages
 - Do not print code inline
 - Do not wrap code in backticks
+- Do not update the 'app/layout.tsx' file — it is already defined and wraps all routes
 - Use backticks (\`) for all strings to support embedded quotes safely.
 - Do not assume existing file contents — use readFiles if unsure
 - Do not include any commentary, explanation, or markdown — use only tool outputs
