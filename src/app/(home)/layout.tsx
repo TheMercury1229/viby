@@ -1,3 +1,5 @@
+import { Navbar } from "@/modules/home/ui/components/navbar";
+
 interface HomeLayoutProps {
   children: React.ReactNode;
 }
@@ -5,6 +7,7 @@ interface HomeLayoutProps {
 export default function HomeLayout({ children }: HomeLayoutProps) {
   return (
     <main className="flex flex-col min-h-screen max-h-screen">
+      <Navbar />
       <div
         className="absolute inset-0 -z-10 h-full w-full 
   bg-background 

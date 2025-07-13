@@ -13,6 +13,7 @@ import { Form, FormField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { PROJECT_TEMPLATES } from "@/modules/home/constants";
+import { useClerk } from "@clerk/nextjs";
 const formSchema = z.object({
   value: z
     .string()
@@ -23,6 +24,7 @@ const formSchema = z.object({
 export const ProjectForm = () => {
   const trpc = useTRPC();
   const router = useRouter();
+  const clerk = useClerk();
   const queryClient = useQueryClient();
   const createProjectMutation = useMutation(
     trpc.projects.create.mutationOptions({
@@ -34,6 +36,10 @@ export const ProjectForm = () => {
       },
       onError: (error) => {
         // Todo:Redirect to pricing page if user is not subscribed
+        if (error.data?.code === "UNAUTHORIZED") {
+          clerk.openSignIn();
+          return;
+        }
         toast.error(error.message || "Failed to create project");
       },
     })
