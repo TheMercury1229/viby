@@ -26,6 +26,7 @@ export const codeAgentFunction = inngest.createFunction(
   async ({ event, step }) => {
     const sandBoxId = await step.run("get-sandbox-id", async () => {
       const sandbox = await Sandbox.create("hardy-nextjs");
+      await sandbox.setTimeout(30000 * 10 * 3);
       return sandbox.sandboxId;
     });
     const previousMessages = await step.run(
@@ -37,8 +38,9 @@ export const codeAgentFunction = inngest.createFunction(
             projectId: event.data.projectId,
           },
           orderBy: {
-            createdAt: "asc",
+            createdAt: "desc",
           },
+          take: 7,
         });
         for (const message of messages) {
           formattedMessage.push({
@@ -47,7 +49,7 @@ export const codeAgentFunction = inngest.createFunction(
             content: message.content,
           });
         }
-        return formattedMessage;
+        return formattedMessage.reverse();
       }
     );
     const state = createState<AgentState>(
