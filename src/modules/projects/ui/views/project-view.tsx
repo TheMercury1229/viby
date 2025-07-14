@@ -16,12 +16,15 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FileExplorer } from "@/components/file-explorer";
 import { UserControls } from "@/modules/home/ui/components/user-controls";
+import { useAuth } from "@clerk/nextjs";
 interface ProjectViewProps {
   projectId: string;
 }
 export const ProjectView = ({ projectId }: ProjectViewProps) => {
   const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
   const [tabsValue, setTabsValue] = useState<"preview" | "code">("preview");
+  const { has } = useAuth();
+  const hasProAccess = has?.({ plan: "pro" });
   return (
     <div className="h-screen w-screen">
       <ResizablePanelGroup direction="horizontal">
@@ -61,11 +64,13 @@ export const ProjectView = ({ projectId }: ProjectViewProps) => {
                 </TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-x-2">
-                <Button asChild size="sm" variant={"tertiary"}>
-                  <Link href="/pricing">
-                    <CrownIcon /> Upgrade
-                  </Link>
-                </Button>
+                {!hasProAccess && (
+                  <Button asChild size="sm" variant={"tertiary"}>
+                    <Link href="/pricing">
+                      <CrownIcon /> Upgrade
+                    </Link>
+                  </Button>
+                )}
                 <UserControls />
               </div>
             </div>

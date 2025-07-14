@@ -8,6 +8,7 @@ import {
 } from "@/trpc/init";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { consumeCredits } from "@/lib/usage";
 
 export const projectsRouter = createTRPCRouter({
   getMany: protectedProcedure.query(async ({ ctx }) => {
@@ -52,6 +53,22 @@ export const projectsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      try {
+        await consumeCredits();
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error consuming credits:", error);
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Something went wrong with usage",
+          });
+        } else {
+          throw new TRPCError({
+            code: "TOO_MANY_REQUESTS",
+            message: "You have ran out of credits",
+          });
+        }
+      }
       const createdProject = await prisma.project.create({
         data: {
           name: generateSlug(2, { format: "kebab" }),

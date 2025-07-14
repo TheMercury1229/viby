@@ -32,13 +32,16 @@ export const ProjectForm = () => {
         form.reset();
         queryClient.invalidateQueries(trpc.projects.getMany.queryOptions());
         router.push(`/projects/${data.id}`);
-        // Invalidate the usage status
+        queryClient.invalidateQueries(trpc.usage.status.queryOptions());
       },
       onError: (error) => {
         // Todo:Redirect to pricing page if user is not subscribed
         if (error.data?.code === "UNAUTHORIZED") {
           clerk.openSignIn();
           return;
+        }
+        if (error.data?.code === "TOO_MANY_REQUESTS") {
+          router.push("/pricing");
         }
         toast.error(error.message || "Failed to create project");
       },
