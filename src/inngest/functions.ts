@@ -4,7 +4,6 @@ import {
   createAgent,
   createTool,
   createNetwork,
-  openai,
   type Tool,
   Message,
   createState,

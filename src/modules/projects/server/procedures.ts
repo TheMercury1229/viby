@@ -1,11 +1,7 @@
 import { inngest } from "@/inngest/client";
 import { prisma } from "@/lib/db";
 import { generateSlug } from "random-word-slugs";
-import {
-  baseProcedure,
-  createTRPCRouter,
-  protectedProcedure,
-} from "@/trpc/init";
+import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { consumeCredits } from "@/lib/usage";
