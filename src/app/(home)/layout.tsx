@@ -17,7 +17,7 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
   opacity-70"
       />
 
-      <div className="flex-1 flex flex-col px-4 pb-4 ">{children}</div>
+      <div className="flex-1 flex flex-col px-4 pb-4">{children}</div>
     </main>
   );
 }
