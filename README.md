@@ -39,14 +39,14 @@ Perfect for solo developers, indie hackers, and teams who want to prototype fast
 - **AI Model**: Gemini 2.5 Flash
 - **Authentication**: Clerk
 - **Live Sandboxes**: e2b
-- **Package Manager**: pnpm
+- **Package Manager**: npm
 
 ## 🚦 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ 
-- pnpm
+- npm
 - Required API keys (see Environment Variables)
 
 ### Installation
@@ -57,15 +57,13 @@ git clone https://github.com/TheMercury1229/viby.git
 cd viby
 
 # Install dependencies
-pnpm install
+npm install
 
-# Set up environment variables
-cp .env.example .env.local
 ```
 
 ### Environment Variables
 
-Create a `.env.local` file with the following variables:
+Create a `.env` file with the following variables:
 
 ```env
 DATABASE_URL="your-db-url"
@@ -84,10 +82,10 @@ NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/"
 
 ```bash
 # Start the development server
-pnpm dev
+npm dev
 
 # Start Inngest dev server (in another terminal)
-pnpm inngest:dev
+npx inngest-cli@latest dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see Viby in action!
