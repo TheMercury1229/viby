@@ -250,7 +250,7 @@ export const codeAgentFunction = inngest.createFunction(
     const sandbox = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandBoxId);
       const host = sandbox.getHost(3000);
-      return `http://${host}`;
+      return `https://${host}`;
     });
 
     // Save the messages to the database
