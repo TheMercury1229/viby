@@ -11,7 +11,6 @@ Perfect for solo developers, indie hackers, and teams who want to prototype fast
 - **⚡ Instant Environments** - Live coding sandboxes that spin up in seconds
 - **🤖 AI-Powered Assistant** - Gemini 2.5 Flash integration with smart context generation
 - **🎨 Beautiful UX** - Themeable, minimal interface built with shadcn/ui
-- **🔄 Real-time Collaboration** - Work together seamlessly in shared environments
 - **🔐 Authentication & Billing** - Secure auth and pricing plans via Clerk
 - **🛠️ Extensible Backend** - Scalable tRPC-based architecture
 
