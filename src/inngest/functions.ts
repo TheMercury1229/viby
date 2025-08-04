@@ -207,7 +207,7 @@ export const codeAgentFunction = inngest.createFunction(
       description: "Generates a title for the code fragment",
       system: FRAGMENT_TITLE_PROMPT,
       model: gemini({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-1.5-flash",
       }),
     });
     const responseGenerator = createAgent({
@@ -215,7 +215,7 @@ export const codeAgentFunction = inngest.createFunction(
       description: "Generates a response based on the task summary",
       system: RESPONSE_PROMPT,
       model: gemini({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-1.5-flash",
       }),
     });
     const { output: fragmentTitle } = await fragementTitleGenerator.run(
