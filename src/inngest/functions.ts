@@ -207,7 +207,7 @@ export const codeAgentFunction = inngest.createFunction(
       description: "Generates a title for the code fragment",
       system: FRAGMENT_TITLE_PROMPT,
       model: gemini({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.0-flash-lite",
       }),
     });
     const responseGenerator = createAgent({
@@ -215,7 +215,7 @@ export const codeAgentFunction = inngest.createFunction(
       description: "Generates a response based on the task summary",
       system: RESPONSE_PROMPT,
       model: gemini({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.0-flash-lite",
       }),
     });
     const { output: fragmentTitle } = await fragementTitleGenerator.run(
@@ -244,9 +244,7 @@ export const codeAgentFunction = inngest.createFunction(
         return response[0].content;
       }
     };
-    const isError =
-      !result.state.data.summary ||
-      Object.keys(result.state.data.files || {}).length === 0;
+    const isError = Object.keys(result.state.data.files || {}).length === 0;
     const sandbox = await step.run("get-sandbox-url", async () => {
       const sandbox = await getSandbox(sandBoxId);
       const host = sandbox.getHost(3000);
@@ -285,9 +283,9 @@ export const codeAgentFunction = inngest.createFunction(
 
     return {
       sandboxUrl: sandbox,
-      title: "Fragement",
+      title: generateFragmentTitle() || "Fragment",
       files: result.state.data.files,
-      summary: result.state.data.summary,
+      summary: result.state.data.summary ?? "Your project is ready!",
     };
   }
 );
