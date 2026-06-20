@@ -67,7 +67,7 @@ export const codeAgentFunction = inngest.createFunction(
         "A code agent that can write code in a Next.js 15.3.3 environment",
       system: PROMPT,
       model: gemini({
-        model: "gemini-2.5-flash-lite-preview-09-2025",
+        model: "gemini-3.5-flash",
         apiKey: process.env.GEMINI_API_KEY,
       }),
       // model: openai({
@@ -207,7 +207,7 @@ export const codeAgentFunction = inngest.createFunction(
       description: "Generates a title for the code fragment",
       system: FRAGMENT_TITLE_PROMPT,
       model: gemini({
-        model: "gemini-2.5-flash-lite-preview-09-2025",
+        model: "gemini-3.1-flash-lite",
       }),
     });
     const responseGenerator = createAgent({
@@ -215,7 +215,7 @@ export const codeAgentFunction = inngest.createFunction(
       description: "Generates a response based on the task summary",
       system: RESPONSE_PROMPT,
       model: gemini({
-        model: "gemini-2.5-flash-lite-preview-09-2025",
+        model: "gemini-3.1-flash-lite",
       }),
     });
     const { output: fragmentTitle } = await fragementTitleGenerator.run(
