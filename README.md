@@ -35,7 +35,7 @@ Perfect for solo developers, indie hackers, and teams who want to prototype fast
 - **Frontend**: Next.js + TailwindCSS + shadcn/ui
 - **Backend**: tRPC
 - **AI Orchestration**: Inngest
-- **AI Model**: Gemini 2.5 Flash
+- **AI Model**: Gemini 3.5 Flash
 - **Authentication**: Clerk
 - **Live Sandboxes**: e2b
 - **Package Manager**: npm
@@ -44,7 +44,7 @@ Perfect for solo developers, indie hackers, and teams who want to prototype fast
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm
 - Required API keys (see Environment Variables)
 
@@ -96,8 +96,6 @@ Viby uses a sophisticated AI orchestration system powered by **Inngest** and **G
 1. **Context Generation**: When you create a new project, Viby analyzes your requirements and generates intelligent context
 2. **AI Orchestration**: Inngest manages the workflow, coordinating between different AI tasks
 3. **Code Generation**: Gemini 2.5 Flash generates code based on your specifications and context
-
-
 
 ## 🏖️ How Live Sandbox Works
 
