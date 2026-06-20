@@ -49,7 +49,7 @@ export const codeAgentFunction = inngest.createFunction(
           });
         }
         return formattedMessage.reverse();
-      }
+      },
     );
     const state = createState<AgentState>(
       {
@@ -58,7 +58,7 @@ export const codeAgentFunction = inngest.createFunction(
       },
       {
         messages: previousMessages,
-      }
+      },
     );
 
     const codeAgent = createAgent<AgentState>({
@@ -67,7 +67,7 @@ export const codeAgentFunction = inngest.createFunction(
         "A code agent that can write code in a Next.js 15.3.3 environment",
       system: PROMPT,
       model: gemini({
-        model: "gemini-3.5-flash",
+        model: "gemini-3.1-flash-lite",
         apiKey: process.env.GEMINI_API_KEY,
       }),
       // model: openai({
@@ -105,7 +105,7 @@ export const codeAgentFunction = inngest.createFunction(
                   "\nstdout:",
                   buffers.stdout,
                   "\nstderr:",
-                  buffers.stderr
+                  buffers.stderr,
                 );
                 return `Command failed: ${error} \nstdout: ${buffers.stdout}\nstderr: ${buffers.stderr}`;
               }
@@ -120,12 +120,12 @@ export const codeAgentFunction = inngest.createFunction(
               z.object({
                 path: z.string(),
                 content: z.string(),
-              })
+              }),
             ),
           }),
           handler: async (
             { files },
-            { step, network }: Tool.Options<AgentState>
+            { step, network }: Tool.Options<AgentState>,
           ) => {
             const newFile = await step?.run(
               "create-or-update-file",
@@ -142,7 +142,7 @@ export const codeAgentFunction = inngest.createFunction(
                 } catch (error) {
                   return "Error creating or updating files: " + error;
                 }
-              }
+              },
             );
             if (typeof newFile === "object") {
               network.state.data.files = newFile;
@@ -175,9 +175,8 @@ export const codeAgentFunction = inngest.createFunction(
       ],
       lifecycle: {
         onResponse: async ({ result, network }) => {
-          const lastAssistantMessage = await lastAssistantTextMessageContent(
-            result
-          );
+          const lastAssistantMessage =
+            await lastAssistantTextMessageContent(result);
           if (lastAssistantMessage && network) {
             if (lastAssistantMessage.includes("<task_summary>")) {
               network.state.data.summary = lastAssistantMessage;
@@ -219,10 +218,10 @@ export const codeAgentFunction = inngest.createFunction(
       }),
     });
     const { output: fragmentTitle } = await fragementTitleGenerator.run(
-      result.state.data.summary
+      result.state.data.summary,
     );
     const { output: response } = await responseGenerator.run(
-      result.state.data.summary
+      result.state.data.summary,
     );
     const generateFragmentTitle = () => {
       if (fragmentTitle[0].type !== "text") {
@@ -287,5 +286,5 @@ export const codeAgentFunction = inngest.createFunction(
       files: result.state.data.files,
       summary: result.state.data.summary ?? "Your project is ready!",
     };
-  }
+  },
 );

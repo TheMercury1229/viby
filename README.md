@@ -36,7 +36,7 @@ Perfect for solo developers, indie hackers, and teams who want to prototype fast
 - **Backend**: tRPC
 - **AI Orchestration**: Inngest
 - **AI Model**: Gemini 3.5 Flash
-- **Authentication**: Clerk
+- **Authentication**:n Clerk
 - **Live Sandboxes**: e2b
 - **Package Manager**: npm
 
